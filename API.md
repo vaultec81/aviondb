@@ -31,6 +31,8 @@ The following APIs documented are in a usable state. More APIs are available, ho
     - [distinct(key, [query])](#collectiondistinct)
     - [getHeadHash()](#collectiongetHeadHash)
     - [syncFromHeadHash(hash, [stopWrites])](#collectionsyncFromHeadHash)
+    - [import(data_in, [options], [progressCallback])](#collectionimport)
+    - [export([options])](#collectionexport)
 - [Static Methods](#static-methods)
   - [init(name, ipfs, [options], [orbitDbOptions])](#init)
   - [create(name, ipfs, [options], [orbitDbOptions])](#create)
@@ -1453,6 +1455,103 @@ If optional `stopWrites` is set to `true`; All write operations will be paused u
 await collection.syncFromHeadHash(
   "zdpuAtmXUPRPueZocCXRaHwh8Hn6AnByMqupdE3iMboNWa1c1"
 );
+```
+
+### collection.import
+
+> Import data into AvionDB
+
+Syntax: `collection.import(data_in, [options], [progressCallback])`
+
+Following parameters are supported by `options`:
+
+- `type` (string): defines the data format of the data to be imported. Allowed values are:
+  - `cbor`: Documents in cbor Buffer format
+  - `json_mongo`: Documents in stringified JSON format
+  - `raw` : Documents in JSON format
+
+If no `type` is passed, it defaults to `json_mongo`.
+
+`progressCallback` is an optional callback function for checking progress of import process.
+
+It takes 3 parameters `currentLength`, `totalLength`, and `progressPercent`.
+
+- `currentLength`: Length of total data stream imported out of `totalLength`.
+- `totalLength`: Total length of the import data stream.
+- `progressPercent`: (`currentLength` / `totalLength`) \* `100`
+
+Here is an example `progressCallback` function.
+
+```javascript
+function progressCallback(currentLength, totalLength, progressPercent) {
+  console.log(currentLength);
+  console.log(totalLength);
+  console.log(progressPercent);
+}
+```
+
+#### Example
+
+```javascript
+await collection.import(
+  [
+    {
+      name: "jessie",
+      age: 35,
+      userId: 971349,
+      _id: "5e8cf7e1b9b93a4c7dc2d69e",
+    },
+    {
+      name: "vasa",
+      age: 22,
+      userId: 971350,
+      _id: "5e8cf7e1b9b93a4c7dc2d68d",
+    },
+  ],
+  { type: "json_mongo" },
+  (currentLength, totalLength, progressPercent) => {
+    console.log(currentLength);
+    console.log(totalLength);
+    console.log(progressPercent);
+  }
+);
+```
+
+### collection.export
+
+> Syncs oplog to head hash.
+
+Syntax: `collection.export([options])`
+
+Returns a `Promise` that resolves to Documents to be exported.
+
+Following parameters are supported by `options`:
+
+- `query` (object): A `find()` query to filter the documents to be exported. By default, there is no query, hence all the documents are exported.
+
+- `type` (string): defines the data format of the data to be exported. Allowed values are:
+  - `cbor`: Documents in cbor Buffer format
+  - `json_mongo`: Documents in stringified JSON format
+  - `raw` : Documents resulting from [`find()`](#collectionfind) query, i.e. JSON format.
+
+If no `type` is passed, it defaults to `json_mongo`.
+
+- `cursor` (object): Cursor methods like `limit`, `skip` & `sort` are supported. See [Supported Cursor Methods](#supportedcursormethods) for more details.
+
+#### Example
+
+```javascript
+await collection.export({
+  type: "json_mongo",
+  cursor: {
+    limit: 100,
+    skip 10,
+    sort: { "age": -1 }
+  },
+  query: {
+    age: { $gt: 20 },
+  },
+});
 ```
 
 ## Static methods

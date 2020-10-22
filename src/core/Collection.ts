@@ -513,12 +513,12 @@ class Collection extends OrbitdbStore {
    *
    * @param {any} data_in Data to be imported in "cbor", "json_mongo", or "raw" format
    * @param {ImportOptionsInterface} options Options for import()
-   * @param {Function} progressCallback Callback Function for checking progress of syncing process
+   * @param {Function} progressCallback Callback Function for checking progress of import process
    */
   async import(
     data_in: any,
     options: ImportOptionsInterface = {},
-    progressCallback: Function
+    progressCallback?: Function
   ) {
     if (!options.overwrite) {
       //TODO: drop database and overwrite all entries.
@@ -564,13 +564,13 @@ class Collection extends OrbitdbStore {
    * @param {AsyncIterable} stream Data stream to be imported
    * @param {number} length Total stream length
    * @param {ImportStreamOptionsInterface} options Options for importStream()
-   * @param {Function} progressCallback Callback Function for checking progress of syncing process
+   * @param {Function} progressCallback Callback Function for checking progress of import process
    */
   async importStream(
     stream: AsyncIterable<any>,
     length: number,
     options: ImportStreamOptionsInterface,
-    progressCallback: Function
+    progressCallback?: Function
   ) {
     const totalLength = length; //Assumes array at the moment.
     let currentLength = 0;
@@ -611,25 +611,20 @@ class Collection extends OrbitdbStore {
   async export(
     options: ExportOptionsInterface = {}
   ): Promise<string | DocumentInterface[]> {
-    if (!options.limit) {
-      options.limit = 0; // No limit.
+    if (!options.cursor) {
+      options.cursor = {}; // No limit.
     }
     if (!options.type) {
-      options.type = "json_mongodb";
+      options.type = "json_mongo";
       //options.type = "cbor";
       //options.type = "raw";
     }
     if (!options.query) {
       options.query = {};
     }
-    const results = await this.find(
-      {},
-      {
-        limit: options.limit,
-      }
-    );
+    const results = await this.find(options.query, null, options.cursor);
     switch (options.type) {
-      case "json_mongodb": {
+      case "json_mongo": {
         //TODO: Future streamed json.
         return JSON.stringify(results);
       }

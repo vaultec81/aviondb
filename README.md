@@ -54,7 +54,7 @@ This is the TypeScript implementation and it works with **Browsers**, **Node.js*
   - [Run Tests](#run-tests)
   - [Benchmarks](#benchmarks)
 - [Specs](#specs)
-- [Community Repos](#community-repos)
+- [Projects using AvionDB](#projects-using-aviondb)
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Are there implementations in other languages?](#are-there-implementations-in-other-languages)
   - [Where can I see your Roadmap?](#where-can-i-see-your-roadmap)
@@ -116,6 +116,8 @@ const aviondb = await AvionDB.init("DatabaseName", ipfs);
 **See [examples/index.html](./examples/index.html) to check out a fully functioning example for AvionDB with browser.**
 
 ## Usage
+
+**We are upgrading AvionDB to newer versions of `js-ipfs`. For now, please use js-ipfs@0.44.0**
 
 ### Example
 
@@ -229,7 +231,15 @@ See [benchmarks/](https://github.com/dappkit/aviondb/tree/master/test/benchmarks
 
 We are working on the initial Specs. See [AvionDB Specs doc](https://github.com/dappkit/aviondb-specs/blob/master/README.md)
 
-## Community Repos
+## Projects using AvionDB
+
+- [nOS Client](https://github.com/nos/client): **nOS** is a blockchain powered virtual operating system that serves as the gateway to Decentralized Applications. The **nOS Client** (Developer MVP Release) allows for the development of Decentralized Applications that interact with Smart Contracts in the back-end.
+
+- [orbitdb-nos-identity-provider](https://github.com/nos/orbitdb-nos-identity-provider/): OrbitDB and AvionDB Identity Provider for nOS Network and other ARK Core-based blockchains.
+
+- [bitsong-media-player](https://github.com/bitsongofficial/bitsong-media-player): **[Private Repo]** BitSong Media Player for BitSong Blockchain, uses AvionDB to store, and share song tracks & metadata among the browser clients.
+
+- [js-pinza](https://github.com/vaultec81/js-pinza): Pinza is a IPFS pinning system using [orbit-db](https://github.com/orbitdb/orbit-db), and [aviondb](https://github.com/dappkit/aviondb) as a distributed database.
 
 - [Movie-Reviews-CRUD-Application](https://github.com/BCDevs/movies-avionDB): A Kickstarter Application to understand how AvionDB Works by Implementing one.
 

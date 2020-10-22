@@ -150,7 +150,8 @@ export interface InsertOneOptions {
 }
 
 export interface DocumentInterface {
-  _id: object | string | number;
+  _id: string | number;
+  [key: string]: any;
 }
 
 export interface FindOptionsInterface {
@@ -225,6 +226,6 @@ export interface ImportStreamOptionsInterface {
 
 export interface ExportOptionsInterface {
   type?: string;
-  limit?: number;
+  cursor?: object;
   query?: object;
 }
